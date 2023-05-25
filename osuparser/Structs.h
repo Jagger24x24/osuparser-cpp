@@ -36,4 +36,9 @@ struct HitSample {
 	int index;
 	int volume;
 	std::string filename;
+
+	std::string to_string() {
+		std::string c = ":";
+		return std::to_string(this->normalSet) + c + std::to_string(this->additionSet) + c + std::to_string(this->index) + c + std::to_string(this->volume) + c + filename;
+	}
 };

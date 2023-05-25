@@ -37,7 +37,7 @@ public:
 	std::string to_string() {
 		std::string c = ",";
 		auto ObjectType = static_cast<int>(this->ObjectType);
-		return this->Position.to_string() + c + std::to_string(this->Time) + c + std::to_string(ObjectType) + c + std::to_string(this->HitSound);
+		return this->Position.to_string() + c + std::to_string(this->Time) + c + std::to_string(ObjectType) + c + std::to_string(this->HitSound) + c + this->HitSample.to_string();
 	}
 // wow so much stuff
 };
