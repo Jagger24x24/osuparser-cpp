@@ -1,26 +1,6 @@
 #include "Structs.h"
-#include <vector>
 
-enum class ObjectType : int
-{
-	HitCircle = 1,
-	Slider = 2,
-	HitCircleNC = 5,
-	SliderNC = 6,
-	Spinner = 12
-	
-};
-
-enum class CurveType : char
-{
-	Bezier = 'B',
-	Centripetal_Catmull_Rom = 'C', // who came up with this name
-	Linear = 'L',
-	PerfectCircle = 'P'
-
-};
-
-class Object	
+class HitObject
 {
 public:
 	struct Vector Position;
@@ -31,7 +11,7 @@ public:
 
 };
 
-class HitCirlce : public Object 
+class HitCirlce : public HitObject
 {
 public:
 	std::string to_string() {
@@ -42,7 +22,7 @@ public:
 // wow so much stuff
 };
 
-class Slider : public Object 
+class Slider : public HitObject
 {
 public:
 	CurveType curveType;
@@ -51,11 +31,40 @@ public:
 	float length;
 	std::vector<int> edgeSounds;
 	std::vector<int> edgeSets;
-
 };
 
-class Spinner : public Object 
+class Spinner : public HitObject
 {
 public:
 	int endTime;
+};
+
+class TimingPoint {
+public:
+	int Time;
+	float beatLength;
+	int meter;
+	int sampleSet;
+	int sampleIndex;
+	int volume;
+	IntBool uninherited;
+	int effects;
+
+	float GetSV() {
+		if (this->uninherited == IntBool::True) {
+			return 1.0;
+		}
+		else {
+			return (-1 / this->beatLength) * 100;
+		}
+	}
+};
+
+class OsuMap {
+public:
+	int Version;
+	struct General General;
+	struct Metadata Metadata;
+	// std::vector<TimingPoint> TimingPoints;
+	std::vector<HitObject> HitObjects;
 };
