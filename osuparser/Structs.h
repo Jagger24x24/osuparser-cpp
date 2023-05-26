@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 enum class IntBool : int
 {
@@ -49,6 +50,26 @@ struct Vector {
 
 	std::string to_string() {
 		return std::to_string(this->X) + "," + std::to_string(this->Y);
+	}
+
+	Vector operator+(const Vector& vect) const 
+	{
+		return Vector { this->X + vect.X, this->Y + vect.Y };
+	}
+
+	Vector operator-(const Vector& vect) const
+	{
+		return Vector{ this->X - vect.X, this->Y - vect.Y };
+	}
+
+	Vector operator*(const Vector& vect) const
+	{
+		return Vector{ this->X * vect.X, this->Y * vect.Y };
+	}
+
+	Vector operator/(const Vector& vect) const
+	{
+		return Vector{ this->X / vect.X, this->Y / vect.Y };
 	}
 };
 

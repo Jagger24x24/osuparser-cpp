@@ -65,6 +65,7 @@ public:
 	int Version;
 	struct General General;
 	struct Metadata Metadata;
-	// std::vector<TimingPoint> TimingPoints;
+	std::vector<TimingPoint> TimingPoints;
 	std::vector<HitObject> HitObjects;
+
 };
