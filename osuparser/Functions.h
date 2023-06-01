@@ -196,6 +196,31 @@ namespace OsuFunctions {
 		return TimingPoints;
 	}
 
+	std::vector<HitObject> GetHitObjects(std::vector<std::string> lines) {
+		std::vector<HitObject> HitObjects;
+		int i = 0;
+		bool InHitObjects;
+		while (i < lines.size()) {
+			std::string line = lines[i];
+			if (line == "[HitObjects]") {
+				InHitObjects = true;
+			}
+
+			if (InHitObjects) {
+				auto HOStrs = split(line, ',');
+				HitObject HO; // i will skid my python
+
+				HitObjects.push_back(HO);
+			}
+
+			i++;
+			if (line == "") {
+				InHitObjects = false;
+			}
+		}
+		return HitObjects;
+	}
+
 	Metadata GetMetadata(std::vector<std::string> lines) {
 		Metadata metadata;
 		int i = 0;
@@ -258,6 +283,7 @@ namespace OsuFunctions {
 		map.Metadata = GetMetadata(lines); // there is probably a better way to do this
 		map.Difficulty = GetDifficulty(lines);
 		map.TimingPoints = GetTimingPoints(lines);
+		map.HitObjects = GetHitObjects(lines);
 
 		return map;
 	}
