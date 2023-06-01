@@ -160,16 +160,14 @@ public:
 struct General {
 	std::string AudioFilename; // Location of the audio file relative to the current folder
 	int AudioLeadIn; // Milliseconds of silence before the audio starts playing
-	std::string AudioHash; // Deprecated
+	std::string AudioHash; // Deprecated // but i still want it nice to have
 	int PreviewTime; // Time in milliseconds when the audio preview should start
 	Countdown cd; // Speed of the countdown before the first hit object.
 	std::string SampleSet; // Sample set that will be used if timing points do not override it (Normal, Soft, Drum)
 	float StackLeniency; // Multiplier for the threshold in time where hit objects placed close together stack (0–1)
 	GameMode Mode; // Game mode.
 	IntBool LetterboxInBreaks; // Whether or not breaks have a letterboxing effect (0 or 1)
-	int StoryFireInFront; // Deprecated
 	IntBool UseSkinSprites; // Whether or not the storyboard can use the user's skin images (0 or 1)
-	int AlwaysShowPlayfield; // Deprecated
 	std::string OverlayPosition; // Draw order of hit circle overlays compared to hit numbers (NoChange = use skin setting, Below = draw overlays under numbers, Above = draw overlays on top of numbers)
 	std::string SkinPreference; // Preferred skin to use during gameplay
 	IntBool EpilepsyWarning; // Whether or not a warning about flashing colours should be shown at the beginning of the map (0 or 1)
@@ -197,6 +195,7 @@ public:
 	int Version;
 	struct General General;
 	struct Metadata Metadata;
+	struct Difficulty Difficulty;
 	std::vector<TimingPoint> TimingPoints;
 	std::vector<HitObject> HitObjects;
 
