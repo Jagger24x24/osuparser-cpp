@@ -66,7 +66,7 @@ enum class ObjectType : int
 {
 	HitCircle = 1,
 	Slider = 2,
-	HitCircleNC = 5,
+	HitCircleNC = 5, // nc is new combo
 	SliderNC = 6,
 	Spinner = 12
 
@@ -123,7 +123,7 @@ class Slider : public HitObject
 {
 public:
 	CurveType curveType;
-	std::vector<Vector> curvePoint;
+	std::vector<Vector> curvePoints;
 	int slides;
 	float length;
 	std::vector<int> edgeSounds;
