@@ -102,9 +102,9 @@ class HitObject
 public:
 	struct Vector Position;
 	int Time;
-	ObjectType ObjectType; // not sure about this
+	ObjectType HitObjectType; // not sure about this
 	int HitSound;
-	HitSample HitSample;
+	HitSample HitObjectHitSample;
 
 };
 
@@ -164,7 +164,7 @@ struct General {
 	int PreviewTime; // Time in milliseconds when the audio preview should start
 	Countdown cd; // Speed of the countdown before the first hit object.
 	std::string SampleSet; // Sample set that will be used if timing points do not override it (Normal, Soft, Drum)
-	float StackLeniency; // Multiplier for the threshold in time where hit objects placed close together stack (0–1)
+	float StackLeniency; // Multiplier for the threshold in time where hit objects placed close together stack (0ï¿½1)
 	GameMode Mode; // Game mode.
 	IntBool LetterboxInBreaks; // Whether or not breaks have a letterboxing effect (0 or 1)
 	IntBool UseSkinSprites; // Whether or not the storyboard can use the user's skin images (0 or 1)

@@ -1,7 +1,9 @@
 #include "Classes.h"
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <sstream>
+#include <cmath>
 
 void stripPrefix(std::string& str, const std::string& prefix) {
 	if (str.substr(0, prefix.size()) == prefix) {
@@ -78,7 +80,8 @@ namespace OsuFunctions {
 
 	Vector ConvertObjectPosToScreenPos(Vector Resolution, HitObject Object) { // i hate geometry
 		Vector PlayfieldSize = { 512, 384 };
-		Vector OsuResolution = { std::round(Resolution.X * 0.4541666666666667), std::round(Resolution.Y * 0.4537037037037037) };
+
+		Vector OsuResolution = { std::round(Resolution.X * 0.4541666666666667), std::round(Resolution.Y * 0.4537037037037037) }; // warning but it's fine
 		int GapY = (OsuResolution.Y - PlayfieldSize.Y) * 0.5; // pov arm computer
 		Vector Offset = { (OsuResolution.X - PlayfieldSize.X) * 0.5, std::round(GapY * 0.7735849056603774) };
 		Vector OsuPos = OsuResolution + Offset;
@@ -92,72 +95,71 @@ namespace OsuFunctions {
 		int i = 0;
 		while (i <= (lines.size() -1)) {
 			std::string line = lines[i];
-
-			if (line.contains("AudioFilename: ")) {
+			if (line.find("AudioFilename: ")) {
 				stripPrefix(line, "AudioFilename: ");
 				general.AudioFilename = line;
 			}
-			else if (line.contains("AudioLeadIn: ")) {
+			else if (line.find("AudioLeadIn: ")) {
 				stripPrefix(line, "AudioLeadIn: ");
 				general.AudioLeadIn = std::stoi(line);
 			}
-			else if (line.contains("AudioHash: ")) {
+			else if (line.find("AudioHash: ")) {
 				stripPrefix(line, "AudioHash: ");
 				general.AudioHash = line;
 			}
-			else if (line.contains("PreviewTime: ")) {
+			else if (line.find("PreviewTime: ")) {
 				stripPrefix(line, "PreviewTime: ");
 				general.PreviewTime = std::stoi(line);
 			}
-			else if (line.contains("Countdown: ")) {
+			else if (line.find("Countdown: ")) {
 				stripPrefix(line, "Countdown: ");
 				general.cd = static_cast<Countdown>(std::stoi(line));
 			}
-			else if (line.contains("SampleSet: ")){
+			else if (line.find("SampleSet: ")){
 				stripPrefix(line, "SampleSet: ");
 				general.SampleSet = line;
 			}
-			else if (line.contains("StackLeniency: ")) {
+			else if (line.find("StackLeniency: ")) {
 				stripPrefix(line, "StackLeniency: ");
 				general.StackLeniency = std::stof(line);
 			}
-			else if (line.contains("Mode: ")) {
+			else if (line.find("Mode: ")) {
 				stripPrefix(line, "Mode: ");
 				general.Mode = static_cast<GameMode>(std::stoi(line));
 			}
-			else if (line.contains("LetterboxInBreaks: ")) {
+			else if (line.find("LetterboxInBreaks: ")) {
 				stripPrefix(line, "LetterboxInBreaks: ");
 				general.LetterboxInBreaks = static_cast<IntBool>(std::stoi(line));
 			}
-			else if (line.contains("UseSkinSprites: ")) {
+			else if (line.find("UseSkinSprites: ")) {
 				stripPrefix(line, "UseSkinSprites: ");
 				general.UseSkinSprites = static_cast<IntBool>(std::stoi(line));
 			}
-			else if (line.contains("OverlayPosition: ")) {
+			else if (line.find("OverlayPosition: ")) {
 				stripPrefix(line, "OverlayPosition: ");
 				general.OverlayPosition = line;
 			}
-			else if (line.contains("SkinPreference: ")) {
+			else if (line.find("SkinPreference: ")) {
 				stripPrefix(line, "SkinPreference: ");
 				general.SkinPreference = line;
 			}
-			else if (line.contains("EpilepsyWarning: ")) {
+			else if (line.find("EpilepsyWarning: ")) {
 				stripPrefix(line, "EpilepsyWarning: ");
 				general.EpilepsyWarning = static_cast<IntBool>(std::stoi(line));
 			}
-			else if (line.contains("CountdownOffset: ")) {
+			else if (line.find("CountdownOffset: ")) {
 				stripPrefix(line, "CountdownOffset: ");
 				general.CountdownOffset = std::stoi(line);
 			}
-			else if (line.contains("SpecialStyle: ")) {
+			else if (line.find("SpecialStyle: ")) {
 				stripPrefix(line, "SpecialStyle: ");
 				general.SpecialStyle = static_cast<IntBool>(std::stoi(line));
 			}
-			else if (line.contains("WidescreenStoryboard: ")) {
+			else if (line.find("WidescreenStoryboard: ")) {
 				stripPrefix(line, "WidescreenStoryboard: ");
 				general.WidescreenStoryboard = static_cast<IntBool>(std::stoi(line));
 			}
-			else if (line.contains("SamplesMatchPlaybackRate: ")) {
+			else if (line.find("SamplesMatchPlaybackRate: ")) {
 				stripPrefix(line, "SamplesMatchPlaybackRate: ");
 				general.SamplesMatchPlaybackRate = static_cast<IntBool>(std::stoi(line));
 			}
@@ -172,27 +174,27 @@ namespace OsuFunctions {
 		int i = 0;
 		while (i <= (lines.size() - 1)) {
 			std::string line = lines[i];
-			if (line.contains("HPDrainRate:")) {
+			if (line.find("HPDrainRate:")) {
 				stripPrefix(line, "HPDrainRate:");
 				difficulty.HPDrainRate = std::stoi(line);
 			}
-			else if (line.contains("CircleSize:")) {
+			else if (line.find("CircleSize:")) {
 				stripPrefix(line, "CircleSize:");
 				difficulty.CircleSize = std::stoi(line);
 			}
-			else if (line.contains("OverallDifficulty:")) {
+			else if (line.find("OverallDifficulty:")) {
 				stripPrefix(line, "OverallDifficulty:");
 				difficulty.OverallDifficulty = std::stoi(line);
 			}
-			else if (line.contains("ApproachRate:")) {
+			else if (line.find("ApproachRate:")) {
 				stripPrefix(line, "ApproachRate:");
 				difficulty.ApproachRate = std::stoi(line);
 			}
-			else if (line.contains("SliderMultiplier:")) {
+			else if (line.find("SliderMultiplier:")) {
 				stripPrefix(line, "SliderMultiplier:");
 				difficulty.SliderMultiplier = std::stof(line);
 			}
-			else if (line.contains("SliderTickRate:")) {
+			else if (line.find("SliderTickRate:")) {
 				stripPrefix(line, "SliderTickRate:");
 				difficulty.SliderTickRate = std::stoi(line);
 			}
@@ -301,43 +303,43 @@ namespace OsuFunctions {
 		int i = 0;
 		while (i <= (lines.size() - 1)) {
 			std::string line = lines[i];
-			if (line.contains("Title:")) {
+			if (line.find("Title:")) {
 				stripPrefix(line, "Title:");
 				metadata.Title = line;
 			}
-			else if (line.contains("TitleUnicode:")) {
+			else if (line.find("TitleUnicode:")) {
 				stripPrefix(line, "TitleUnicode:");
 				metadata.TitleUnicode = line;
 			}
-			else if (line.contains("Artist:")) {
+			else if (line.find("Artist:")) {
 				stripPrefix(line, "Artist:");
 				metadata.Artist = line;
 			}
-			else if (line.contains("ArtistUnicode:")) {
+			else if (line.find("ArtistUnicode:")) {
 				stripPrefix(line, "ArtistUnicode:");
 				metadata.ArtistUnicode = line;
 			}
-			else if (line.contains("Creator:")) {
+			else if (line.find("Creator:")) {
 				stripPrefix(line, "Creator:");
 				metadata.Creator = line;
 			}
-			else if (line.contains("Version:")) {
+			else if (line.find("Version:")) {
 				stripPrefix(line, "Version:");
 				metadata.Version = line;
 			}
-			else if (line.contains("Source:")) {
+			else if (line.find("Source:")) {
 				stripPrefix(line, "Source:");
 				metadata.Source = line;
 			}
-			else if (line.contains("Tags:")) {
+			else if (line.find("Tags:")) {
 				stripPrefix(line, "Tags:");
 				metadata.Tags = split(line, ' ');
 			}
-			else if (line.contains("BeatmapID:")) {
+			else if (line.find("BeatmapID:")) {
 				stripPrefix(line, "BeatmapID:");
 				metadata.BeatmapID = std::stoi(line);
 			}
-			else if (line.contains("BeatmapSetID:")) {
+			else if (line.find("BeatmapSetID:")) {
 				stripPrefix(line, "BeatmapSetID:");
 				metadata.BeatmapSetID = std::stoi(line);
 			}
