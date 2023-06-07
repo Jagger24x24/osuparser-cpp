@@ -130,7 +130,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="osuparser.cpp" />
-    <ClCompile Include="Structs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Classes.h" />

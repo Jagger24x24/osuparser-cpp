@@ -95,71 +95,71 @@ namespace OsuFunctions {
 		int i = 0;
 		while (i <= (lines.size() -1)) {
 			std::string line = lines[i];
-			if (line.find("AudioFilename: ")) {
+			if (line.contains("AudioFilename: ")) {
 				stripPrefix(line, "AudioFilename: ");
 				general.AudioFilename = line;
 			}
-			else if (line.find("AudioLeadIn: ")) {
+			else if (line.contains("AudioLeadIn: ")) {
 				stripPrefix(line, "AudioLeadIn: ");
 				general.AudioLeadIn = std::stoi(line);
 			}
-			else if (line.find("AudioHash: ")) {
+			else if (line.contains("AudioHash: ")) {
 				stripPrefix(line, "AudioHash: ");
 				general.AudioHash = line;
 			}
-			else if (line.find("PreviewTime: ")) {
+			else if (line.contains("PreviewTime: ")) {
 				stripPrefix(line, "PreviewTime: ");
 				general.PreviewTime = std::stoi(line);
 			}
-			else if (line.find("Countdown: ")) {
+			else if (line.contains("Countdown: ")) {
 				stripPrefix(line, "Countdown: ");
 				general.cd = static_cast<Countdown>(std::stoi(line));
 			}
-			else if (line.find("SampleSet: ")){
+			else if (line.contains("SampleSet: ")){
 				stripPrefix(line, "SampleSet: ");
 				general.SampleSet = line;
 			}
-			else if (line.find("StackLeniency: ")) {
+			else if (line.contains("StackLeniency: ")) {
 				stripPrefix(line, "StackLeniency: ");
 				general.StackLeniency = std::stof(line);
 			}
-			else if (line.find("Mode: ")) {
+			else if (line.contains("Mode: ")) {
 				stripPrefix(line, "Mode: ");
 				general.Mode = static_cast<GameMode>(std::stoi(line));
 			}
-			else if (line.find("LetterboxInBreaks: ")) {
+			else if (line.contains("LetterboxInBreaks: ")) {
 				stripPrefix(line, "LetterboxInBreaks: ");
 				general.LetterboxInBreaks = static_cast<IntBool>(std::stoi(line));
 			}
-			else if (line.find("UseSkinSprites: ")) {
+			else if (line.contains("UseSkinSprites: ")) {
 				stripPrefix(line, "UseSkinSprites: ");
 				general.UseSkinSprites = static_cast<IntBool>(std::stoi(line));
 			}
-			else if (line.find("OverlayPosition: ")) {
+			else if (line.contains("OverlayPosition: ")) {
 				stripPrefix(line, "OverlayPosition: ");
 				general.OverlayPosition = line;
 			}
-			else if (line.find("SkinPreference: ")) {
+			else if (line.contains("SkinPreference: ")) {
 				stripPrefix(line, "SkinPreference: ");
 				general.SkinPreference = line;
 			}
-			else if (line.find("EpilepsyWarning: ")) {
+			else if (line.contains("EpilepsyWarning: ")) {
 				stripPrefix(line, "EpilepsyWarning: ");
 				general.EpilepsyWarning = static_cast<IntBool>(std::stoi(line));
 			}
-			else if (line.find("CountdownOffset: ")) {
+			else if (line.contains("CountdownOffset: ")) {
 				stripPrefix(line, "CountdownOffset: ");
 				general.CountdownOffset = std::stoi(line);
 			}
-			else if (line.find("SpecialStyle: ")) {
+			else if (line.contains("SpecialStyle: ")) {
 				stripPrefix(line, "SpecialStyle: ");
 				general.SpecialStyle = static_cast<IntBool>(std::stoi(line));
 			}
-			else if (line.find("WidescreenStoryboard: ")) {
+			else if (line.contains("WidescreenStoryboard: ")) {
 				stripPrefix(line, "WidescreenStoryboard: ");
 				general.WidescreenStoryboard = static_cast<IntBool>(std::stoi(line));
 			}
-			else if (line.find("SamplesMatchPlaybackRate: ")) {
+			else if (line.contains("SamplesMatchPlaybackRate: ")) {
 				stripPrefix(line, "SamplesMatchPlaybackRate: ");
 				general.SamplesMatchPlaybackRate = static_cast<IntBool>(std::stoi(line));
 			}
@@ -174,27 +174,27 @@ namespace OsuFunctions {
 		int i = 0;
 		while (i <= (lines.size() - 1)) {
 			std::string line = lines[i];
-			if (line.find("HPDrainRate:")) {
+			if (line.contains("HPDrainRate:")) {
 				stripPrefix(line, "HPDrainRate:");
 				difficulty.HPDrainRate = std::stoi(line);
 			}
-			else if (line.find("CircleSize:")) {
+			else if (line.contains("CircleSize:")) {
 				stripPrefix(line, "CircleSize:");
 				difficulty.CircleSize = std::stoi(line);
 			}
-			else if (line.find("OverallDifficulty:")) {
+			else if (line.contains("OverallDifficulty:")) {
 				stripPrefix(line, "OverallDifficulty:");
 				difficulty.OverallDifficulty = std::stoi(line);
 			}
-			else if (line.find("ApproachRate:")) {
+			else if (line.contains("ApproachRate:")) {
 				stripPrefix(line, "ApproachRate:");
 				difficulty.ApproachRate = std::stoi(line);
 			}
-			else if (line.find("SliderMultiplier:")) {
+			else if (line.contains("SliderMultiplier:")) {
 				stripPrefix(line, "SliderMultiplier:");
 				difficulty.SliderMultiplier = std::stof(line);
 			}
-			else if (line.find("SliderTickRate:")) {
+			else if (line.contains("SliderTickRate:")) {
 				stripPrefix(line, "SliderTickRate:");
 				difficulty.SliderTickRate = std::stoi(line);
 			}
@@ -209,11 +209,13 @@ namespace OsuFunctions {
 		bool InTimingPoints = false;
 		while (i <= (lines.size() - 1)) {
 			std::string line = lines[i];
-			if (line == "[TimingPoints]") {
-				InTimingPoints = true;
+
+			if (line == "") {
+				InTimingPoints = false;
 			}
 
 			if (InTimingPoints) {
+
 				auto TPStrs = split(line, ',');
 				TimingPoint TP;
 				TP.Time = std::stoi(TPStrs[0]);
@@ -227,10 +229,10 @@ namespace OsuFunctions {
 				TimingPoints.push_back(TP);
 			}
 
+			else if (line == "[TimingPoints]") {
+				InTimingPoints = true;			}
+
 			i++;
-			if (line == "") {
-				InTimingPoints = false;
-			}
 		}
 		return TimingPoints;
 	}
@@ -239,63 +241,82 @@ namespace OsuFunctions {
 		std::vector<HitObject> HitObjects;
 		int i = 0;
 		bool InHitObjects = false;
-		std::cout << i << " ? " << lines.size() << std::endl;
+		std::vector<HitObject> Return;
 		while (i <= (lines.size() - 1)) {
 			std::string line = lines[i];
-			std::cout << line << "\n";
-			if (line == "[HitObjects]") {
-				std::cout << "in hos\n";
-				InHitObjects = true;
+			if (line == "") {
+				InHitObjects = false;
+				std::cout << "oHO\n";
 			}
 
 			if (InHitObjects) {
 				auto HOStrs = split(line, ',');
-				auto type = static_cast<ObjectType>(std::stoi(HOStrs[3]));
-				if (type == ObjectType::HitCircle || type == ObjectType::HitCircleNC) {
-					HitObject HO;
-				}
-				else if (type == ObjectType::Slider || type == ObjectType::HitCircleNC) {
-					Slider SO;
-					SO.Position = { std::stoi(HOStrs[0]), std::stoi(HOStrs[1]) };
-					SO.Time = std::stoi(HOStrs[2]);
-					SO.HitSound = std::stoi(HOStrs[4]);
-
-					size_t pos = HOStrs[5].find('|');
-					std::string substring = HOStrs[5].substr(0, pos); // i feel attacked
-					SO.curveType = static_cast<CurveType>(substring[0]);
-
-					SO.curvePoints = getSliderPoints(HOStrs[5]);
-					SO.slides = std::stoi(HOStrs[6]);
-					SO.length = std::stoi(HOStrs[7]);
-					auto edgeSounds = split(HOStrs[8], ':');
-					i = 0;
-					while (i <= edgeSounds.size()) SO.edgeSounds.push_back(std::stoi(edgeSounds[i]));
-
-					auto edgeSets = split(HOStrs[8], ':');
-					i = 0;
-					while (i <= edgeSets.size()) SO.edgeSets.push_back(std::stoi(edgeSets[i]));
-
-					SO.HitSample = StringToHitSample(HOStrs[9]);
+				auto type = std::stoi(HOStrs[3]);
+				if (type == 1 || type == 5) { // circle
+					std::cout << "circle: " << type << std::endl;
+					HitCirlce HO;
+					HO.Position = { std::stoi(HOStrs[0]), std::stoi(HOStrs[1]) };
+					std::cout << "circlePosition: " << type << std::endl;
+					HO.Time = std::stoi(HOStrs[2]);
+					std::cout << "circlePositionTime: " << type << std::endl;
+					HO.HitSound = std::stoi(HOStrs[4]);
+					std::cout << "circlePositionTimeHS: " << type << std::endl;
+					HO.HitObjectHitSample = StringToHitSample(HOStrs[5]);
+					std::cout << "circlePositionTimeHS: " << type << std::endl;
+					Return.push_back(HO);
 
 				}
-				else if (type == ObjectType::Spinner) {
+				else if (type == 2 || type == 6) { // slider
+					std::cout << "slider: " << type << std::endl;
+
+					//Slider SO;
+					//SO.Position = { std::stoi(HOStrs[0]), std::stoi(HOStrs[1]) };
+					//SO.Time = std::stoi(HOStrs[2]);
+					//SO.HitSound = std::stoi(HOStrs[4]);
+					//
+					//std::cout << HOStrs[5][0];
+
+					//SO.curvePoints = getSliderPoints(HOStrs[5]);
+					//SO.slides = std::stoi(HOStrs[6]);
+					//SO.length = std::stoi(HOStrs[7]);
+					//auto edgeSounds = split(HOStrs[8], ':');
+					//i = 0;
+					//while (i <= edgeSounds.size()) SO.edgeSounds.push_back(std::stoi(edgeSounds[i]));
+
+					//auto edgeSets = split(HOStrs[8], ':');
+					//i = 0;
+					//while (i <= edgeSets.size()) SO.edgeSets.push_back(std::stoi(edgeSets[i]));
+
+					//SO.HitObjectHitSample = StringToHitSample(HOStrs[9]);
+
+					//Return.push_back(SO);
+
+				}
+				else if (std::stoi(HOStrs[3]) == 12) { // spinner
+					std::cout << "spinner\n";
+
 					Spinner SO;
 					SO.Position = { std::stoi(HOStrs[0]), std::stoi(HOStrs[1]) };
 					SO.Time = std::stoi(HOStrs[2]);
 					SO.HitSound = std::stoi(HOStrs[4]);
 					SO.endTime = std::stoi(HOStrs[5]);
-					SO.HitSample = StringToHitSample(HOStrs[6]);
-					
+					SO.HitObjectHitSample = StringToHitSample(HOStrs[6]);
+					Return.push_back(SO);
+
+				}
+				else {
+					std::cout << "??? something weird ???\n";
 				}
 			}
-			std::cout << line << std::endl;
-			i++;
-			if (line == "") {
-				std::cout << "out hos\n";
-				InHitObjects = false;
+
+			if (line == "[HitObjects]") {
+				InHitObjects = true;
+				std::cout << "iHO\n";
 			}
+
+			i++;
 		}
-		return HitObjects;
+		return Return;
 	}
 
 	Metadata GetMetadata(std::vector<std::string> lines) {
@@ -303,43 +324,43 @@ namespace OsuFunctions {
 		int i = 0;
 		while (i <= (lines.size() - 1)) {
 			std::string line = lines[i];
-			if (line.find("Title:")) {
+			if (line.contains("Title:")) {
 				stripPrefix(line, "Title:");
 				metadata.Title = line;
 			}
-			else if (line.find("TitleUnicode:")) {
+			else if (line.contains("TitleUnicode:")) {
 				stripPrefix(line, "TitleUnicode:");
 				metadata.TitleUnicode = line;
 			}
-			else if (line.find("Artist:")) {
+			else if (line.contains("Artist:")) {
 				stripPrefix(line, "Artist:");
 				metadata.Artist = line;
 			}
-			else if (line.find("ArtistUnicode:")) {
+			else if (line.contains("ArtistUnicode:")) {
 				stripPrefix(line, "ArtistUnicode:");
 				metadata.ArtistUnicode = line;
 			}
-			else if (line.find("Creator:")) {
+			else if (line.contains("Creator:")) {
 				stripPrefix(line, "Creator:");
 				metadata.Creator = line;
 			}
-			else if (line.find("Version:")) {
+			else if (line.contains("Version:")) {
 				stripPrefix(line, "Version:");
 				metadata.Version = line;
 			}
-			else if (line.find("Source:")) {
+			else if (line.contains("Source:")) {
 				stripPrefix(line, "Source:");
 				metadata.Source = line;
 			}
-			else if (line.find("Tags:")) {
+			else if (line.contains("Tags:")) {
 				stripPrefix(line, "Tags:");
 				metadata.Tags = split(line, ' ');
 			}
-			else if (line.find("BeatmapID:")) {
+			else if (line.contains("BeatmapID:")) {
 				stripPrefix(line, "BeatmapID:");
 				metadata.BeatmapID = std::stoi(line);
 			}
-			else if (line.find("BeatmapSetID:")) {
+			else if (line.contains("BeatmapSetID:")) {
 				stripPrefix(line, "BeatmapSetID:");
 				metadata.BeatmapSetID = std::stoi(line);
 			}
@@ -359,10 +380,45 @@ namespace OsuFunctions {
 		}
 		std::cout << lines.size() << std::endl;
 		map.General = GetGeneral(lines);
-		map.Metadata = GetMetadata(lines); // there is probably a better way to do all of this
-		map.Difficulty = GetDifficulty(lines);
+		std::cout << "GetGeneral Done\n";
+		map.Metadata = GetMetadata(lines); 
+		std::cout << "GetMetadata Done\n";
+		map.Difficulty = GetDifficulty(lines); // there is probably a better way to do all of this
+		std::cout << "GetDifficulty Done\n";
 		map.TimingPoints = GetTimingPoints(lines);
+		std::cout << "GetTimingPoints Done\n";
 		map.HitObjects = GetHitObjects(lines);
+		std::cout << "GetHitObjects Done\n";
+
+		int i = 0;
+		while (map.HitObjects.size() != i) {
+			try {
+				auto object = static_cast<HitCirlce>(map.HitObjects[i]);
+				std::cout << "HitCircle\n";
+			}
+			catch (int mow) {
+				mow = 1;
+			}
+
+			try {
+				auto object = static_cast<Slider>(map.HitObjects[i]);
+				std::cout << "Slider\n";
+
+			}
+			catch (int mow) {
+				mow = 1;
+			}
+
+			try {
+				auto object = static_cast<Spinner>(map.HitObjects[i]);
+				std::cout << "Spinner\n";
+
+			}
+			catch (int mow) {
+				mow = 1;
+			}
+			
+		}
 		std::cout << "????" << std::endl;
 
 		return map;
