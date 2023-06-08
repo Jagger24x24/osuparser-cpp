@@ -44,26 +44,23 @@ namespace OsuFunctions {
 	}
 
 	std::vector<Vector> getSliderPoints(const std::string& value) { // i feel very attacked
-		size_t pos = value.find('|');
 
-		std::string substring = value.substr(pos + 1);
+		std::string CurveTypeSTR(1, value[0]);
+		std::string CurvePointsSTR = value;
+		CurveTypeSTR += "|";
+		stripPrefix(CurvePointsSTR, CurveTypeSTR);
 
-		std::vector<std::string> slider_pointsstr;
 		std::vector<Vector> slider_points;
-		size_t start = 0;
-		while (start < substring.length()) {
-			size_t end = substring.find('|', start); // chat gpt saved me
-			if (end == std::string::npos) {
-				end = substring.length();
-			}
-			std::string point = substring.substr(start, end - start);
-			slider_pointsstr.push_back(point);
-			auto points = split(point, ':');
-			slider_points.push_back({ std::stoi(points[0]), std::stoi(points[1]) }); // what the skunky bozo is this chatgpt skidded slow ass code
-			start = end + 1;
+		auto slider_pointsstrs = split(CurvePointsSTR, '|');
+		for (int i = 0; i != slider_pointsstrs.size(); i++) {
+			auto points = split(slider_pointsstrs[i], ':');
+			auto pointx = std::stoi(points[0]);
+			auto pointy = std::stoi(points[1]);
+			Vector point = { pointx, pointy };
+			// std::cout << point.to_string() << std::endl;
+			slider_points.push_back(point);
+
 		}
-
-
 		return slider_points;
 	}
 
@@ -165,7 +162,6 @@ namespace OsuFunctions {
 			}
 			i++;
 		}
-		std::cout << "????\n";
 		return general;
 	}
 
@@ -239,82 +235,56 @@ namespace OsuFunctions {
 
 	std::vector<HitObject> GetHitObjects(std::vector<std::string> lines) {
 		std::vector<HitObject> HitObjects;
-		int i = 0;
 		bool InHitObjects = false;
 		std::vector<HitObject> Return;
-		while (i <= (lines.size() - 1)) {
+		for (int i = 0; i < lines.size(); i++) {
 			std::string line = lines[i];
 			if (line == "") {
 				InHitObjects = false;
-				std::cout << "oHO\n";
 			}
 
 			if (InHitObjects) {
 				auto HOStrs = split(line, ',');
-				auto type = std::stoi(HOStrs[3]);
-				if (type == 1 || type == 5) { // circle
-					std::cout << "circle: " << type << std::endl;
+				auto type = static_cast<ObjectType>(std::stoi(HOStrs[3]));
+				if (type == ObjectType::HitCircle || type == ObjectType::HitCircleNC) {
 					HitCirlce HO;
-					HO.Position = { std::stoi(HOStrs[0]), std::stoi(HOStrs[1]) };
-					std::cout << "circlePosition: " << type << std::endl;
+					HO.Position = Vector { std::stoi(HOStrs[0]), std::stoi(HOStrs[1]) };
 					HO.Time = std::stoi(HOStrs[2]);
-					std::cout << "circlePositionTime: " << type << std::endl;
+					HO.HitObjectType = type;
 					HO.HitSound = std::stoi(HOStrs[4]);
-					std::cout << "circlePositionTimeHS: " << type << std::endl;
-					HO.HitObjectHitSample = StringToHitSample(HOStrs[5]);
-					std::cout << "circlePositionTimeHS: " << type << std::endl;
+					// HO.HitObjectHitSample = StringToHitSample(HOStrs[5]);
 					Return.push_back(HO);
-
 				}
-				else if (type == 2 || type == 6) { // slider
-					std::cout << "slider: " << type << std::endl;
 
-					//Slider SO;
-					//SO.Position = { std::stoi(HOStrs[0]), std::stoi(HOStrs[1]) };
-					//SO.Time = std::stoi(HOStrs[2]);
-					//SO.HitSound = std::stoi(HOStrs[4]);
-					//
-					//std::cout << HOStrs[5][0];
-
-					//SO.curvePoints = getSliderPoints(HOStrs[5]);
-					//SO.slides = std::stoi(HOStrs[6]);
-					//SO.length = std::stoi(HOStrs[7]);
-					//auto edgeSounds = split(HOStrs[8], ':');
-					//i = 0;
-					//while (i <= edgeSounds.size()) SO.edgeSounds.push_back(std::stoi(edgeSounds[i]));
-
-					//auto edgeSets = split(HOStrs[8], ':');
-					//i = 0;
-					//while (i <= edgeSets.size()) SO.edgeSets.push_back(std::stoi(edgeSets[i]));
-
-					//SO.HitObjectHitSample = StringToHitSample(HOStrs[9]);
-
-					//Return.push_back(SO);
-
-				}
-				else if (std::stoi(HOStrs[3]) == 12) { // spinner
-					std::cout << "spinner\n";
-
-					Spinner SO;
-					SO.Position = { std::stoi(HOStrs[0]), std::stoi(HOStrs[1]) };
+				if (type == ObjectType::Slider || type == ObjectType::SliderNC) {
+					Slider SO;
+					SO.Position = Vector { std::stoi(HOStrs[0]), std::stoi(HOStrs[1]) };
 					SO.Time = std::stoi(HOStrs[2]);
+					SO.HitObjectType = type;
+					SO.HitSound = std::stoi(HOStrs[4]);
+					SO.curveType = static_cast<CurveType>(HOStrs[5][0]);
+					SO.curvePoints = getSliderPoints(HOStrs[5]); // this function took like 3 hours and i don't want to talk about it
+					SO.slides = std::stoi(HOStrs[6]);
+					SO.length = std::stof(HOStrs[7]);
+					Return.push_back(SO);
+					// fuck edge set edge sounds and hit samples for sliders they don't exist i promise
+				}
+
+				if (type == ObjectType::Spinner) {
+					Spinner SO;
+					SO.Position = Vector { std::stoi(HOStrs[0]), std::stoi(HOStrs[1]) };
+					SO.Time = std::stoi(HOStrs[2]);
+					SO.HitObjectType = type;
 					SO.HitSound = std::stoi(HOStrs[4]);
 					SO.endTime = std::stoi(HOStrs[5]);
-					SO.HitObjectHitSample = StringToHitSample(HOStrs[6]);
+					// SO.HitObjectHitSample = StringToHitSample(HOStrs[6]);
 					Return.push_back(SO);
-
-				}
-				else {
-					std::cout << "??? something weird ???\n";
 				}
 			}
 
 			if (line == "[HitObjects]") {
 				InHitObjects = true;
-				std::cout << "iHO\n";
 			}
-
-			i++;
 		}
 		return Return;
 	}
@@ -378,7 +348,6 @@ namespace OsuFunctions {
 		while (std::getline(file, line)) {
 			lines.push_back(line);
 		}
-		std::cout << lines.size() << std::endl;
 		map.General = GetGeneral(lines);
 		std::cout << "GetGeneral Done\n";
 		map.Metadata = GetMetadata(lines); 
@@ -389,37 +358,6 @@ namespace OsuFunctions {
 		std::cout << "GetTimingPoints Done\n";
 		map.HitObjects = GetHitObjects(lines);
 		std::cout << "GetHitObjects Done\n";
-
-		int i = 0;
-		while (map.HitObjects.size() != i) {
-			try {
-				auto object = static_cast<HitCirlce>(map.HitObjects[i]);
-				std::cout << "HitCircle\n";
-			}
-			catch (int mow) {
-				mow = 1;
-			}
-
-			try {
-				auto object = static_cast<Slider>(map.HitObjects[i]);
-				std::cout << "Slider\n";
-
-			}
-			catch (int mow) {
-				mow = 1;
-			}
-
-			try {
-				auto object = static_cast<Spinner>(map.HitObjects[i]);
-				std::cout << "Spinner\n";
-
-			}
-			catch (int mow) {
-				mow = 1;
-			}
-			
-		}
-		std::cout << "????" << std::endl;
 
 		return map;
 	}
