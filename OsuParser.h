@@ -24,7 +24,7 @@ std::vector<std::string> split(std::string input, char split) {
 	return elements;
 }
 
-namespace OsuFunctions {
+namespace OsuParser {
 	float GetSliderTimeMS(Slider Slider, Difficulty Difficulty, TimingPoint TimingPoint) {
 		return Slider.length / (Difficulty.SliderMultiplier * 100 * TimingPoint.GetSV()) * TimingPoint.beatLength;
 	}
@@ -75,7 +75,7 @@ namespace OsuFunctions {
 		return HitS;
 	}
 
-	Vector ConvertObjectPosToScreenPos(Vector Resolution, HitObject Object) { // i hate geometry
+	Vector ProjectOsuToScreen(Vector Resolution, HitObject Object) { // i hate geometry
 		Vector PlayfieldSize = { 512, 384 };
 
 		Vector OsuResolution = { std::round(Resolution.X * 0.4541666666666667), std::round(Resolution.Y * 0.4537037037037037) }; // warning but it's fine
